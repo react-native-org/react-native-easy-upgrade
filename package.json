@@ -1,0 +1,35 @@
+{
+  "name": "react-native-appupgrade",
+  "version": "0.0.1",
+  "description": "Easy to upgrade your react-native app",
+  "main": "index.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/react-native-org/react-native-appupgrade.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/react-native-org/react-native-appupgrade/issues"
+  },
+  "homepage": "https://github.com/react-native-org/react-native-appupgrade#readme",
+  "devDependencies": {
+    "react-native": "^0.44.3"
+  },
+  "importSort": {
+    ".js, .jsx, .es6, .es,": {
+      "parser": "babylon",
+      "style": "module-compact"
+    }
+  },
+  "dependencies": {
+    "react-native-fs": "^2.9.12"
+  }
+}
