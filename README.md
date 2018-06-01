@@ -40,7 +40,7 @@ project(':react-native-app-upgrade').projectDir = new File(rootProject.projectDi
 import RNAppUpgrade from '@hm910705/react-native-appupgrade';
 const appUpdate = new AppUpgrade({
       iOSAppId: '11111111',
-      downloadApkSavePath: '', // if not set, default is data/newApp.apk
+      downloadApkSavePath: '', // if not set, default is data/Temp_App${versionName}.apk
       needUpdateApp: needUpdate => {
         Alert.alert('提示', '发现新版本，是否更新?', [
           { text: '取消', onPress: () => {} },
