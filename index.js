@@ -90,9 +90,7 @@ class AppUpgrade {
     }
 
     const progressDivider = 1;
-    const downloadDestPath = this.options.downloadApkSavePath
-      ? this.options.downloadApkSavePath
-      : `${ReactNativeFS.DocumentDirectoryPath}/NewApp.apk`;
+    const downloadDestPath = this.options.downloadApkSavePath || `${ReactNativeFS.DocumentDirectoryPath}/Temp_App${RNAppUpgrade.versionName}.apk`;
 
     const ret = ReactNativeFS.downloadFile({
       fromUrl: apkUrl,
