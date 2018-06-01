@@ -4,7 +4,7 @@ import ReactNativeFS from 'react-native-fs';
 const { RNAppUpgrade } = NativeModules;
 
 let jobId = -1;
-const iOS_APP_URL = 'https://itunes.apple.com/lookup?id=';
+const ORIGIN_IOS_APP_LOOKUP_URL = 'https://itunes.apple.com/lookup?id=';
 const IS_ANDROID = Platform.OS === 'android';
 
 class AppUpgrade {
@@ -12,39 +12,38 @@ class AppUpgrade {
     this.options = options;
   }
 
-  async _callRemote(method, url, params) {
-    const request =
-      method === 'POST'
-        ? {
-          method: method,
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify(params)
-        }
-        : {};
+  async _requestUrlAsync(method, url, params) {
+    let request = {};
+    if (method === 'POST') {
+      request = {
+        method: method,
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(params)
+      };
+    }
 
     return new Promise((resolve, reject) => {
       fetch(url, request)
         .then(response => response.json())
-        .then(result => {
-          resolve(result);
-        })
-        .catch(err => {
-          reject(err);
-        });
+        .then(resolve)
+        .catch(reject);
     });
   }
 
   async _getCheckParams() {
     const localVersionName = RNAppUpgrade.versionName;
-    let extraOptions = {};
-    if (this.options.getExtraOption) {
-      extraOptions = await this.options.getExtraOption();
+    const localVersionCode = RNAppUpgrade.versionCode;
+    let extraParams = {};
+    const { getExtraParams } = this.options;
+    if (getExtraParams && typeof getExtraParams === 'function') {
+      extraParams = await this.options.getExtraParams();
     }
     return {
       localVersionName,
-      extraOptions
+      localVersionCode,
+      extraParams
     };
   }
 
@@ -52,7 +51,7 @@ class AppUpgrade {
     try {
       const checkUpdateUrl = this.options.checkUpdateUrl;
       const params = await this._getCheckParams();
-      const result = await this._callRemote('POST', checkUpdateUrl, params);
+      const result = await this._requestUrlAsync('POST', checkUpdateUrl, params);
       if (result.isUpdate) {
         this._updateApp(result);
       } else {
@@ -79,60 +78,69 @@ class AppUpgrade {
     }
   }
 
-  _downloadApk(apkUrl) {
-    NetInfo.fetch().done(res => {
-      if (res === 'WIFI') {
-        const progress = data => {
-          const percentage = (100 * data.bytesWritten / data.contentLength) | 0;
-          this.options.downloadApkProgress && this.options.downloadApkProgress(percentage);
-        };
-        const begin = res => {
-          this.options.downloadApkStart && this.options.downloadApkStart();
-        };
-        const progressDivider = 1;
-        const downloadDestPath = this.options.downloadApkSavePath
-          ? this.options.downloadApkSavePath
-          : `${ReactNativeFS.DocumentDirectoryPath}/NewApp.apk`;
-
-        const ret = ReactNativeFS.downloadFile({
-          fromUrl: apkUrl,
-          toFile: downloadDestPath,
-          begin,
-          progress,
-          background: true,
-          progressDivider
-        });
-
-        jobId = ret.jobId;
-
-        ret.promise
-          .then(res => {
-            // console.log('downloadApkEnd');
-            this.options.downloadApkEnd &&
-            this.options.downloadApkEnd(needInstall => {
-              if (needInstall) {
-                RNAppUpgrade.installApk(downloadDestPath);
-              }
-            });
-
-            jobId = -1;
-          })
-          .catch(err => {
-            this._handleError(err);
-
-            jobId = -1;
-          });
-      }
-    });
+  get downloading() {
+    return jobId > -1;
   }
 
-  async _getAppStoreVersion() {
+  downloadSetting = ()=> {
+    const progress = data => {
+      const percentage = (100 * data.bytesWritten / data.contentLength) | 0;
+      this.options.downloadApkProgress && this.options.downloadApkProgress(percentage);
+    };
+    const begin = res => {
+      this.options.downloadApkStart && this.options.downloadApkStart();
+    };
+
+    return {progress, begin};
+  }
+
+  _downloadApk(apkUrl) {
+    if (this.downloading) {
+      return;
+    }
+
+    const progressDivider = 1;
+    const downloadDestPath = this.options.downloadApkSavePath
+      ? this.options.downloadApkSavePath
+      : `${ReactNativeFS.DocumentDirectoryPath}/NewApp.apk`;
+
+    const ret = ReactNativeFS.downloadFile({
+      fromUrl: apkUrl,
+      toFile: downloadDestPath,
+      begin,
+      progress,
+      background: true,
+      progressDivider
+    });
+
+    jobId = ret.jobId;
+
+    ret.promise
+      .then(res => {
+        // console.log('downloadApkEnd');
+        this.options.downloadApkEnd &&
+        this.options.downloadApkEnd(needInstall => {
+          if (needInstall) {
+            RNAppUpgrade.installApk(downloadDestPath);
+          }
+        });
+
+        jobId = -1;
+      })
+      .catch(err => {
+        this._handleError(err);
+
+        jobId = -1;
+      });
+  }
+
+  async _checkiOSUpdate() {
     // iOSAppId不存在
     if (!this.options.iOSAppId) {
       return;
     }
     try {
-      const data = await this._callRemote('GET', iOS_APP_URL + this.options.iOSAppId);
+      const data = await this._requestUrlAsync('GET', ORIGIN_IOS_APP_LOOKUP_URL + this.options.iOSAppId);
       this._handleResult(data);
     } catch (err) {
       this._handleError(err);
@@ -162,11 +170,15 @@ class AppUpgrade {
     this.options.onError && this.options.onError(err);
   }
 
+  _getNetwork() {
+    NetInfo.fetch().done;
+  }
+
   checkUpdate() {
     if (IS_ANDROID) {
       this._checkAndroidUpdate();
     } else {
-      this._getAppStoreVersion();
+      this._checkiOSUpdate();
     }
   }
 }

@@ -40,5 +40,39 @@ project(':react-native-app-upgrade').projectDir = new File(rootProject.projectDi
 import RNAppUpgrade from '@hm910705/react-native-appupgrade';
 
 // TODO: What to do with the module?
+const appUpdate = new AppUpgrade({
+      iOSAppId: '11111111',
+      checkUpdateUrl: 'https://github.com/checkUpdateUrl',
+      extraOptions: () => {},
+      needUpdateApp: needUpdate => {
+        Alert.alert('提示', '发现新版本，是否更新?', [
+          { text: '取消', onPress: () => {} },
+          { text: '更新', onPress: () => needUpdate(true) }
+        ]);
+      },
+      forceUpdateApp: () => {
+        console.log('Force update will start');
+      },
+      notNeedUpdateApp: () => {
+        console.log('App is up to date');
+      },
+      downloadApkStart: () => {
+        console.log('Start');
+      },
+      downloadApkProgress: progress => {
+        console.log(`Downloading ${progress}%...`);
+      },
+      downloadApkEnd: needUpdate => {
+        Alert.alert('提示', '发现新版本，是否直接安装?', [
+          { text: '取消', onPress: () => {} },
+          { text: '安装', onPress: () => needUpdate(true) }
+        ]);
+      },
+      onError: () => {
+        console.log('downloadApkError');
+      }
+    });
+
+    appUpdate.checkUpdate();
 RNAppUpgrade;
 ```
