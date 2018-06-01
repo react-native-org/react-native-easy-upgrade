@@ -26,7 +26,7 @@ Easy to upgrade your react-native app
 2. Append the following lines to `android/settings.gradle`:
 ```
 include ':react-native-app-upgrade'
-project(':react-native-app-upgrade').projectDir = new File(rootProject.projectDir, 	'../node_modules/react-native-app-upgrade/android')
+project(':react-native-app-upgrade').projectDir = new File(rootProject.projectDir,   '../node_modules/react-native-app-upgrade/android')
 ```
 
 3. Insert the following lines inside the dependencies block in `android/app/build.gradle`:
@@ -38,23 +38,14 @@ project(':react-native-app-upgrade').projectDir = new File(rootProject.projectDi
 ## Usage
 ```javascript
 import RNAppUpgrade from '@hm910705/react-native-appupgrade';
-
-// TODO: What to do with the module?
 const appUpdate = new AppUpgrade({
       iOSAppId: '11111111',
-      checkUpdateUrl: 'https://github.com/checkUpdateUrl',
-      extraOptions: () => {},
+      downloadApkSavePath: '', // if not set, default is data/newApp.apk
       needUpdateApp: needUpdate => {
         Alert.alert('提示', '发现新版本，是否更新?', [
           { text: '取消', onPress: () => {} },
           { text: '更新', onPress: () => needUpdate(true) }
         ]);
-      },
-      forceUpdateApp: () => {
-        console.log('Force update will start');
-      },
-      notNeedUpdateApp: () => {
-        console.log('App is up to date');
       },
       downloadApkStart: () => {
         console.log('Start');
@@ -73,6 +64,19 @@ const appUpdate = new AppUpgrade({
       }
     });
 
-    appUpdate.checkUpdate();
+#### Android
+###### step 1 check should update
+     you can get the local App version status like this,include `versionName` and `versionCode`
+	const version = appUpdate.getLocalVersion()
+###### step 2 check network and download the new apk
+	you can get the NetworkStatus like this
+	const networkStatus = await appUpdate.getNetworkStatus()
+###### step 3 update app
+    // if is Android
+    appUpdate.updateAndroidApp(apkUrl);
+#### iOS
+    // if is iOS
+    appUpdate.updateiOSApp();
+
 RNAppUpgrade;
 ```
