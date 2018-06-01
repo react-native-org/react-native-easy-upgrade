@@ -1,7 +1,8 @@
 
 #import "RNAppUpgrade.h"
+#import <UIKit/UIKit.h>
 
-@interface RNAppUpdate()
+@interface RNAppUpgrade()
 
 @property (nonatomic, strong) NSString *versionName;
 @property (nonatomic, strong) NSString *versionCode;
