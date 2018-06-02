@@ -117,7 +117,7 @@ class AppUpgrade {
       try {
         const data = await this._requestUrlAsync('GET', DEFAULT_IOS_APP_LOOKUP_URL + this.options.iOSAppId);
         if (data.resultCount < 1) {
-          return;
+          return reject('no result');
         }
         const result = data.results[0];
         const appStoreVersion = result.version;
@@ -136,8 +136,9 @@ class AppUpgrade {
     });
   }
 
-  navigateToAppStore() {
-    RNAppUpgrade.installFromAppStore(this.trackViewUrl);
+  navigateToAppStore(trackViewUrl) {
+    if (!trackViewUrl) trackViewUrl = this.trackViewUrl;
+    RNAppUpgrade.installFromAppStore(trackViewUrl);
   }
 }
 
