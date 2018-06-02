@@ -1,10 +1,18 @@
 
 package com.reactlibrary;
 
+import android.content.Intent;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+import android.net.Uri;
+
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
-import com.facebook.react.bridge.Callback;
+
+import java.io.File;
+import java.util.HashMap;
+import java.util.Map;
 
 public class RNAppUpgradeModule extends ReactContextBaseJavaModule {
 
