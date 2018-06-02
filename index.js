@@ -31,6 +31,10 @@ class AppUpgrade {
     });
   }
 
+  get defaultApkSavePath() {
+    return `${ReactNativeFS.DocumentDirectoryPath}/Temp_App${RNAppUpgrade.versionName}.apk`;
+  }
+
   get downloading() {
     return jobId > -1;
   }
@@ -44,40 +48,21 @@ class AppUpgrade {
     this.options.downloadApkStart && this.options.downloadApkStart();
   }
 
-  _handleResult(data) {
-    if (data.resultCount < 1) {
-      return;
-    }
-    const result = data.results[0];
-    const version = result.version;
-    const trackViewUrl = result.trackViewUrl;
-    if (version !== RNAppUpgrade.versionName) {
-      if (this.options.needUpdateApp) {
-        this.options.needUpdateApp(isUpdate => {
-          if (isUpdate) {
-            RNAppUpgrade.installFromAppStore(trackViewUrl);
-          }
-        });
-      }
-    }
-  }
-
   _handleError(err) {
     console.log('downloadApkError', err);
     this.options.onError && this.options.onError(err);
   }
 
-
   getNetworkStatus() {
-    return new Promise(async(resolve) => {
+    return new Promise(async resolve => {
       NetInfo.fetch().done(resolve);
-    })
+    });
   }
 
-  getLocalVersion() {
-    const localVersionName = RNAppUpgrade.versionName;
-    const localVersionCode = RNAppUpgrade.versionCode;
-    return {localVersionName, localVersionCode};
+  getLocalVersionInfo() {
+    const versionName = RNAppUpgrade.versionName;
+    const versionCode = RNAppUpgrade.versionCode;
+    return { versionName, versionCode };
   }
 
   /**
@@ -90,7 +75,9 @@ class AppUpgrade {
     }
 
     const progressDivider = 1;
-    const downloadDestPath = this.options.downloadApkSavePath || `${ReactNativeFS.DocumentDirectoryPath}/Temp_App${RNAppUpgrade.versionName}.apk`;
+    const downloadDestPath =
+      this.options.downloadApkSavePath ||
+      `${ReactNativeFS.DocumentDirectoryPath}/Temp_App${RNAppUpgrade.versionName}.apk`;
 
     const ret = ReactNativeFS.downloadFile({
       fromUrl: apkUrl,
@@ -122,19 +109,36 @@ class AppUpgrade {
       });
   }
 
-  async updateiOSApp() {
-    // iOSAppId不存在
-    if (!this.options.iOSAppId) {
-      return;
-    }
-    try {
-      const data = await this._requestUrlAsync('GET', DEFAULT_IOS_APP_LOOKUP_URL + this.options.iOSAppId);
-      this._handleResult(data);
-    } catch (err) {
-      this._handleError(err);
-    }
+  checkiOSUpdate() {
+    return new Promise(async (resolve, reject) => {
+      if (!this.options.iOSAppId) {
+        return reject('not found iOSAppId');
+      }
+      try {
+        const data = await this._requestUrlAsync('GET', DEFAULT_IOS_APP_LOOKUP_URL + this.options.iOSAppId);
+        if (data.resultCount < 1) {
+          return;
+        }
+        const result = data.results[0];
+        const appStoreVersion = result.version;
+        const localVersion = RNAppUpgrade.versionName;
+        this.trackViewUrl = result.trackViewUrl;
+        let isUpdate = false;
+        if (appStoreVersion !== localVersion) {
+          isUpdate = true;
+        }
+        const res = { appStoreVersion, localVersion, isUpdate };
+        resolve(res);
+      } catch (err) {
+        reject(err);
+        this._handleError(err);
+      }
+    });
   }
 
+  navigateToAppStore() {
+    RNAppUpgrade.installFromAppStore(this.trackViewUrl);
+  }
 }
 
 export default AppUpgrade;
