@@ -33,7 +33,7 @@ RCT_EXPORT_MODULE()
              };
 }
 
-RCT_EXPORT_METHOD(installFromAppStore:(nonnull NSString *)trackViewURL) {
+RCT_EXPORT_METHOD(openURL:(nonnull NSString *)trackViewURL) {
     UIApplication *application = [UIApplication sharedApplication];
     NSURL *URL = [NSURL URLWithString:trackViewURL];
 

@@ -7,13 +7,13 @@ Easy to upgrade your react-native app
 
 ### Mostly automatic installation
 
-`$ react-native link @hm910705/react-native-app-upgrade`
+`$ react-native link @hm910705/react-native-appupgrade`
 
 ### Manual installation
 #### iOS
 
 1. In XCode, in the project navigator, right click `Libraries` ➜ `Add Files to [your project's name]`
-2. Go to `node_modules` ➜ `react-native-app-upgrade` and add `RNAppUpgrade.xcodeproj`
+2. Go to `node_modules` ➜ `react-native-appupgrade` and add `RNAppUpgrade.xcodeproj`
 3. In XCode, in the project navigator, select your project. Add `libRNAppUpgrade.a` to your project's `Build Phases` ➜ `Link Binary With Libraries`
 4. Run your project (`Cmd+R`)<
 
@@ -25,58 +25,52 @@ Easy to upgrade your react-native app
 
 2. Append the following lines to `android/settings.gradle`:
 ```
-include ':react-native-app-upgrade'
-project(':react-native-app-upgrade').projectDir = new File(rootProject.projectDir,   '../node_modules/react-native-app-upgrade/android')
+include ':react-native-appupgrade'
+project(':react-native-appupgrade').projectDir = new File(rootProject.projectDir,   '../node_modules/react-native-appupgrade/android')
 ```
 
 3. Insert the following lines inside the dependencies block in `android/app/build.gradle`:
 ```
-  compile project(':react-native-app-upgrade')
+  compile project(':react-native-appupgrade')
 ```
-
-
 ## Usage
+
 ```javascript
 import RNAppUpgrade from '@hm910705/react-native-appupgrade';
-const appUpdate = new AppUpgrade({
-      iOSAppId: '11111111',
-      downloadApkSavePath: '', // if not set, default is data/Temp_App${versionName}.apk
-      needUpdateApp: needUpdate => {
-        Alert.alert('提示', '发现新版本，是否更新?', [
-          { text: '取消', onPress: () => {} },
-          { text: '更新', onPress: () => needUpdate(true) }
-        ]);
-      },
-      downloadApkStart: () => {
-        console.log('Start');
-      },
-      downloadApkProgress: progress => {
-        console.log(`Downloading ${progress}%...`);
-      },
-      downloadApkEnd: needUpdate => {
-        Alert.alert('提示', '发现新版本，是否直接安装?', [
-          { text: '取消', onPress: () => {} },
-          { text: '安装', onPress: () => needUpdate(true) }
-        ]);
-      },
-      onError: () => {
-        console.log('downloadApkError');
-      }
-    });
 
-#### Android
-###### step 1 check should update
-     you can get the local App version status like this,include `versionName` and `versionCode`
-	const version = appUpdate.getLocalVersion()
-###### step 2 check network and download the new apk
-	you can get the NetworkStatus like this
-	const networkStatus = await appUpdate.getNetworkStatus()
-###### step 3 update app
-    // if is Android
-    appUpdate.updateAndroidApp(apkUrl);
-#### iOS
-    // if is iOS
-    appUpdate.updateiOSApp();
+const rnAppUpgrade = new RNAppUpgrade({
+  iosAppId: '1229539546',
+  downloadApkSavePath: '', // if not set, default is data/Temp_App${versionName}.apk
+  downloadApkStart: () => {
+    console.log('Start');
+  },
+  downloadApkProgress: progress => {
+    console.log(`Downloading ${progress}%...`);
+  },
+  downloadApkEnd: needUpdate => {
+    Alert.alert('提示', '发现新版本，无需流量既可更新！', [
+      { text: '取消', onPress: () => {} },
+      { text: '安装', onPress: () => {
+        rnAppUpgrade.installUpgradeVersion();
+      } }
+    ]);
+  },
+  onError: () => {
+    console.log('downloadApkError');
+  }
+});
 
-RNAppUpgrade;
+// For Android
+if (Platform.os === 'android') {
+  Toast("发现新版本，正在下载");
+  rnAppUpgrade.downloadApk(apkFilePath);
+} else if (Platform.OS === 'ios'){
+  rnAppUpgrade.checkAppVersionIOS()
+  .then(versionInfo => {
+    if(versionInfo.hasNewVersion){
+      // Navigate to AppStore
+      rnAppUpgrade.navigateToAppStore();
+    }
+  });
+}
 ```

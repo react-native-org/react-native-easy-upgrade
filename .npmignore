@@ -1,2 +1,4 @@
 docs/
 examples/
+.editorconfig
+.prettierrc.js
