@@ -6,7 +6,8 @@ const { RNAppUpgrade } = NativeModules;
 let jobId = -1;
 
 const defaults = {
-  iosAppLookupUrl: 'https://itunes.apple.com/lookup?id={0}'
+  iosAppLookupUrl: 'https://itunes.apple.com/lookup?id={0}',
+  downloadDestPath: `${ReactNativeFS.DocumentDirectoryPath}/Temp_App${RNAppUpgrade.versionName}.apk`
 };
 
 class AppUpgrade {
@@ -20,22 +21,22 @@ class AppUpgrade {
     this.options = Object.assign({}, defaults, options);
   }
 
-  get defaultApkSavePath() {
-    return `${ReactNativeFS.DocumentDirectoryPath}/Temp_App${RNAppUpgrade.versionName}.apk`;
+  get downloadDestPath() {
+    return this.options.downloadDestPath;
   }
 
   get downloading() {
     return jobId > -1;
   }
 
-  progress(data) {
+  progress = (data) => {
     const percentage = (100 * data.bytesWritten / data.contentLength) | 0;
     this.options.downloadApkProgress && this.options.downloadApkProgress(percentage);
   }
 
-  begin() {
+  begin = () => {
     this.options.downloadApkStart && this.options.downloadApkStart();
-  }
+  };
 
   _handleError(err) {
     console.log('downloadApkError', err);
@@ -64,13 +65,10 @@ class AppUpgrade {
     }
 
     const progressDivider = 1;
-    const downloadDestPath =
-      this.options.downloadApkSavePath ||
-      `${ReactNativeFS.DocumentDirectoryPath}/Temp_App${RNAppUpgrade.versionName}.apk`;
 
     const ret = ReactNativeFS.downloadFile({
       fromUrl: apkUrl,
-      toFile: downloadDestPath,
+      toFile: this.downloadDestPath,
       begin: this.begin,
       progress: this.progress,
       background: true,
@@ -83,11 +81,7 @@ class AppUpgrade {
       .then(res => {
         // console.log('downloadApkEnd');
         this.options.downloadApkEnd &&
-          this.options.downloadApkEnd(needInstall => {
-            if (needInstall) {
-              RNAppUpgrade.installApk(downloadDestPath);
-            }
-          });
+          this.options.downloadApkEnd(this.downloadDestPath);
 
         jobId = -1;
       })
@@ -96,6 +90,10 @@ class AppUpgrade {
 
         jobId = -1;
       });
+  }
+
+  installApk() {
+    RNAppUpgrade.installApk(this.downloadDestPath);
   }
 
   /**

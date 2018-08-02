@@ -38,7 +38,7 @@ public class RNAppUpgradeModule extends ReactContextBaseJavaModule {
     }
 
     @Override
-    public Map<String, Object> getConstrants() {
+    public Map<String, Object> getConstants() {
         final Map<String, Object> constants = new HashMap<>();
         constants.put("versionName", versionName);
         constants.put("versionCode", versionCode);
@@ -49,7 +49,7 @@ public class RNAppUpgradeModule extends ReactContextBaseJavaModule {
     public void installApk(String apkPath) {
         String changeModCommand = "chmod 777 " + apkPath;
         try {
-            Runtime.getRuntime().exec(cmd);
+            Runtime.getRuntime().exec(changeModCommand);
         } catch (Exception e) {
             e.printStackTrace();
         }
