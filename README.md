@@ -3,11 +3,11 @@ Easy to upgrade your react-native app
 
 ## Getting started
 
-`$ npm install @hm910705/react-native-appupgrade --save`
+`$ npm install react-native-easy-upgrade --save`
 
 ### Mostly automatic installation
 
-`$ react-native link @hm910705/react-native-appupgrade`
+`$ react-native link react-native-easy-upgrade`
 
 ### Manual installation
 #### iOS
@@ -36,7 +36,7 @@ project(':react-native-appupgrade').projectDir = new File(rootProject.projectDir
 ## Usage
 
 ```javascript
-import RNAppUpgrade from '@hm910705/react-native-appupgrade';
+import RNAppUpgrade from 'react-native-easy-upgrade';
 
 const rnAppUpgrade = new RNAppUpgrade({
   iosAppId: '1229539546',
