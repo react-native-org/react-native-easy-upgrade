@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		B3E7B58A1CC2AC0600A0062D /* RNAppUpgrade.m in Sources */ = {isa = PBXBuildFile; fileRef = B3E7B5891CC2AC0600A0062D /* RNAppUpgrade.m */; };
+		B3E7B58A1CC2AC0600A0062D /* RNEasyUpgrade.m in Sources */ = {isa = PBXBuildFile; fileRef = B3E7B5891CC2AC0600A0062D /* RNEasyUpgrade.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -23,9 +23,9 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		134814201AA4EA6300B7C361 /* libRNAppUpgrade.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libRNAppUpgrade.a; sourceTree = BUILT_PRODUCTS_DIR; };
-		B3E7B5881CC2AC0600A0062D /* RNAppUpgrade.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RNAppUpgrade.h; sourceTree = "<group>"; };
-		B3E7B5891CC2AC0600A0062D /* RNAppUpgrade.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RNAppUpgrade.m; sourceTree = "<group>"; };
+		134814201AA4EA6300B7C361 /* libRNEasyUpgrade.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libRNEasyUpgrade.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		B3E7B5881CC2AC0600A0062D /* RNEasyUpgrade.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RNEasyUpgrade.h; sourceTree = "<group>"; };
+		B3E7B5891CC2AC0600A0062D /* RNEasyUpgrade.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RNEasyUpgrade.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -42,7 +42,7 @@
 		134814211AA4EA7D00B7C361 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				134814201AA4EA6300B7C361 /* libRNAppUpgrade.a */,
+				134814201AA4EA6300B7C361 /* libRNEasyUpgrade.a */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -50,8 +50,8 @@
 		58B511D21A9E6C8500147676 = {
 			isa = PBXGroup;
 			children = (
-				B3E7B5881CC2AC0600A0062D /* RNAppUpgrade.h */,
-				B3E7B5891CC2AC0600A0062D /* RNAppUpgrade.m */,
+				B3E7B5881CC2AC0600A0062D /* RNEasyUpgrade.h */,
+				B3E7B5891CC2AC0600A0062D /* RNEasyUpgrade.m */,
 				134814211AA4EA7D00B7C361 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -59,9 +59,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		58B511DA1A9E6C8500147676 /* RNAppUpgrade */ = {
+		58B511DA1A9E6C8500147676 /* RNEasyUpgrade */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 58B511EF1A9E6C8500147676 /* Build configuration list for PBXNativeTarget "RNAppUpgrade" */;
+			buildConfigurationList = 58B511EF1A9E6C8500147676 /* Build configuration list for PBXNativeTarget "RNEasyUpgrade" */;
 			buildPhases = (
 				58B511D71A9E6C8500147676 /* Sources */,
 				58B511D81A9E6C8500147676 /* Frameworks */,
@@ -71,9 +71,9 @@
 			);
 			dependencies = (
 			);
-			name = RNAppUpgrade;
+			name = RNEasyUpgrade;
 			productName = RCTDataManager;
-			productReference = 134814201AA4EA6300B7C361 /* libRNAppUpgrade.a */;
+			productReference = 134814201AA4EA6300B7C361 /* libRNEasyUpgrade.a */;
 			productType = "com.apple.product-type.library.static";
 		};
 /* End PBXNativeTarget section */
@@ -90,7 +90,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 58B511D61A9E6C8500147676 /* Build configuration list for PBXProject "RNAppUpgrade" */;
+			buildConfigurationList = 58B511D61A9E6C8500147676 /* Build configuration list for PBXProject "RNEasyUpgrade" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
@@ -102,7 +102,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				58B511DA1A9E6C8500147676 /* RNAppUpgrade */,
+				58B511DA1A9E6C8500147676 /* RNEasyUpgrade */,
 			);
 		};
 /* End PBXProject section */
@@ -112,7 +112,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				B3E7B58A1CC2AC0600A0062D /* RNAppUpgrade.m in Sources */,
+				B3E7B58A1CC2AC0600A0062D /* RNEasyUpgrade.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -211,7 +211,7 @@
 				);
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				OTHER_LDFLAGS = "-ObjC";
-				PRODUCT_NAME = RNAppUpgrade;
+				PRODUCT_NAME = RNEasyUpgrade;
 				SKIP_INSTALL = YES;
 			};
 			name = Debug;
@@ -227,7 +227,7 @@
 				);
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				OTHER_LDFLAGS = "-ObjC";
-				PRODUCT_NAME = RNAppUpgrade;
+				PRODUCT_NAME = RNEasyUpgrade;
 				SKIP_INSTALL = YES;
 			};
 			name = Release;
@@ -235,7 +235,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		58B511D61A9E6C8500147676 /* Build configuration list for PBXProject "RNAppUpgrade" */ = {
+		58B511D61A9E6C8500147676 /* Build configuration list for PBXProject "RNEasyUpgrade" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				58B511ED1A9E6C8500147676 /* Debug */,
@@ -244,7 +244,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		58B511EF1A9E6C8500147676 /* Build configuration list for PBXNativeTarget "RNAppUpgrade" */ = {
+		58B511EF1A9E6C8500147676 /* Build configuration list for PBXNativeTarget "RNEasyUpgrade" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				58B511F01A9E6C8500147676 /* Debug */,

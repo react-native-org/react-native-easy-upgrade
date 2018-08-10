@@ -1,16 +1,16 @@
 import { NativeModules, NetInfo, Platform } from 'react-native';
 import { download, isFileExists } from './lib/downloadHelper';
 
-const { RNAppUpgrade } = NativeModules;
+const { RNEasyUpgrade } = NativeModules;
 
 let jobId = -1;
 const isAndroid = Platform.OS === 'android';
 
-const VERSION_NAME = RNAppUpgrade.versionName;
-const VERSION_CODE = RNAppUpgrade.versionCode;
+const VERSION_NAME = RNEasyUpgrade.versionName;
+const VERSION_CODE = RNEasyUpgrade.versionCode;
 const DEFAULT_DOWNLOAD_APK_NAME = `Temp_App${VERSION_NAME}2.apk`;
 
-const DocumentDirectoryPath = isAndroid && RNAppUpgrade.RNDocumentDirectoryPath;
+const DocumentDirectoryPath = isAndroid && RNEasyUpgrade.RNDocumentDirectoryPath;
 
 const defaults = {
   iOSAppLookupUrl: 'https://itunes.apple.com/lookup?id={0}',
@@ -18,7 +18,7 @@ const defaults = {
   downloadDescription: '新版本更新包下载中',
   downloadDestDirectory: DocumentDirectoryPath,
   downloadDestPath: `${DocumentDirectoryPath}/${DEFAULT_DOWNLOAD_APK_NAME}`,
-  downloadApkEnd: path => RNAppUpgrade.installApk(path),
+  downloadApkEnd: path => RNEasyUpgrade.installApk(path),
   onError: () => {}
 };
 
@@ -98,7 +98,7 @@ class AppUpgrade {
 
   installApk(apkPath = this.downloadDestPath) {
     console.log(apkPath);
-    RNAppUpgrade.installApk(apkPath);
+    RNEasyUpgrade.installApk(apkPath);
   }
 
   /**
@@ -129,7 +129,7 @@ class AppUpgrade {
    * @param {string} [trackViewUrl] [Optional] The app download page
    */
   navigateToAppStore(trackViewUrl) {
-    RNAppUpgrade.openURL(trackViewUrl || this.trackViewUrl);
+    RNEasyUpgrade.openURL(trackViewUrl || this.trackViewUrl);
   }
 
   startAppUpdate(apkUrl, appStoreUrl = this.trackViewUrl, options = { checkApkHasDownloaded: true }) {

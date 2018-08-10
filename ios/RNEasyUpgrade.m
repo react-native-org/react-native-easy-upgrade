@@ -1,15 +1,15 @@
 
-#import "RNAppUpgrade.h"
+#import "RNEasyUpgrade.h"
 #import <UIKit/UIKit.h>
 
-@interface RNAppUpgrade()
+@interface RNEasyUpgrade()
 
 @property (nonatomic, strong) NSString *versionName;
 @property (nonatomic, strong) NSString *versionCode;
 
 @end
 
-@implementation RNAppUpgrade
+@implementation RNEasyUpgrade
 
 - (dispatch_queue_t)methodQueue
 {

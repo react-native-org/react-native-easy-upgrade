@@ -1,15 +1,16 @@
 # react-native-easy-upgrade
-Easy to upgrade your react-native app
 
-## Getting started
+简易的升级您的 `React Native` APP的版本（全新安装包安装）
+
+## 起步
 
 `$ npm install react-native-easy-upgrade --save`
 
-### Mostly automatic installation
+### 自动安装
 
 `$ react-native link react-native-easy-upgrade`
 
-### Manual installation
+### 手动安装
 #### iOS
 
 1. In XCode, in the project navigator, right click `Libraries` ➜ `Add Files to [your project's name]`

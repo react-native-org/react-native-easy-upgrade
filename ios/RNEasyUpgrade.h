@@ -5,7 +5,7 @@
 #import <React/RCTBridgeModule.h>
 #endif
 
-@interface RNAppUpgrade : NSObject <RCTBridgeModule>
+@interface RNEasyUpgrade : NSObject <RCTBridgeModule>
 
 @end
   

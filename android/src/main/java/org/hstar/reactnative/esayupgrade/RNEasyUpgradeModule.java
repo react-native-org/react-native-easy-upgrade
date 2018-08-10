@@ -1,5 +1,5 @@
 
-package com.newegg.higo.esayUpgrade;
+package org.hstar.reactnative.easyupgrade;
 
 import android.app.DownloadManager;
 import android.content.BroadcastReceiver;
@@ -24,13 +24,13 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
-public class RNAppUpgradeModule extends ReactContextBaseJavaModule {
+public class RNEasyUpgradeModule extends ReactContextBaseJavaModule {
 
     private final ReactApplicationContext reactContext;
     private String versionName = "1.0.0";
     private int versionCode = 1;
 
-    private Downloader downloader;
+    private EasyDownloadManager downloader;
     private LongSparseArray<Callback> appDownloads;
 
     private static final String RNDocumentDirectoryPath = "RNDocumentDirectoryPath";
@@ -40,11 +40,11 @@ public class RNAppUpgradeModule extends ReactContextBaseJavaModule {
     private static final String RNCachesDirectoryPath = "RNCachesDirectoryPath";
     private static final String RNExternalCachesDirectoryPath = "RNExternalCachesDirectoryPath";
 
-    public RNAppUpgradeModule(ReactApplicationContext reactContext) {
+    public RNEasyUpgradeModule(ReactApplicationContext reactContext) {
         super(reactContext);
         this.reactContext = reactContext;
 
-        downloader = new Downloader(reactContext);
+        downloader = new EasyDownloadManager(reactContext);
         appDownloads = new LongSparseArray<>();
         IntentFilter filter = new IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE);
         reactContext.registerReceiver(downloadReceiver, filter);
@@ -60,7 +60,7 @@ public class RNAppUpgradeModule extends ReactContextBaseJavaModule {
 
     @Override
     public String getName() {
-        return "RNAppUpgrade";
+        return "RNEasyUpgrade";
     }
 
 

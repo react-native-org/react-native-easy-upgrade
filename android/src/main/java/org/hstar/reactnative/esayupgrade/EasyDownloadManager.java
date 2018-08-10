@@ -1,4 +1,4 @@
-package com.newegg.higo.esayUpgrade;
+package org.hstar.reactnative.easyupgrade;
 
 import android.app.DownloadManager;
 import android.content.Context;
@@ -15,12 +15,12 @@ import java.util.HashMap;
 
 import static android.content.Context.DOWNLOAD_SERVICE;
 
-public class Downloader {
+public class EasyDownloadManager {
 
     private DownloadManager downloadManager;
     private Context context;
 
-    public Downloader(Context ctx) {
+    public EasyDownloadManager(Context ctx) {
         context = ctx;
         downloadManager = (DownloadManager) ctx.getSystemService(DOWNLOAD_SERVICE);
     }

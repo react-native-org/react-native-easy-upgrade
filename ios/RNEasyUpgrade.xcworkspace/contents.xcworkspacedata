@@ -3,7 +3,6 @@
 <Workspace
    version = "1.0">
    <FileRef
-      location = "group:RNAppUpgrade.xcodeproj">
+      location = "group:RNEasyUpgrade.xcodeproj">
    </FileRef>
 </Workspace>
-  
