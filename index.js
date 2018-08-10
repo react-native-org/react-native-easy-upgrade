@@ -1,5 +1,5 @@
-import { Alert, NativeModules, NetInfo, Platform } from 'react-native';
-import { download, isFileExists } from './downloadHelper';
+import { NativeModules, NetInfo, Platform } from 'react-native';
+import { download, isFileExists } from './lib/downloadHelper';
 
 const { RNAppUpgrade } = NativeModules;
 

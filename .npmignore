@@ -2,3 +2,4 @@ docs/
 examples/
 .editorconfig
 .prettierrc.js
+package-lock.json
