@@ -28,6 +28,5 @@
       "parser": "babylon",
       "style": "module-compact"
     }
-  },
-
+  }
 }
