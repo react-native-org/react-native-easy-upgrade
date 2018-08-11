@@ -1,6 +1,6 @@
 *.pbxproj -text
 android/build/
-
+.idea
 
 
 # Logs
