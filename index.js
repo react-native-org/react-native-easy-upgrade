@@ -8,7 +8,7 @@ const isAndroid = Platform.OS === 'android';
 
 const VERSION_NAME = RNEasyUpgrade.versionName;
 const VERSION_CODE = RNEasyUpgrade.versionCode;
-const DEFAULT_DOWNLOAD_APK_NAME = `Temp_App${VERSION_NAME}2.apk`;
+const DEFAULT_DOWNLOAD_APK_NAME = `newVersion.apk`;
 
 const DocumentDirectoryPath = isAndroid && RNEasyUpgrade.RNDocumentDirectoryPath;
 
@@ -17,7 +17,7 @@ const defaults = {
   downloadTitle: '下载更新包',
   downloadDescription: '新版本更新包下载中',
   downloadDestDirectory: DocumentDirectoryPath,
-  downloadDestPath: `${DocumentDirectoryPath}/${DEFAULT_DOWNLOAD_APK_NAME}`,
+  downloadApkName: DEFAULT_DOWNLOAD_APK_NAME,
   downloadApkEnd: path => RNEasyUpgrade.installApk(path),
   onError: () => {}
 };
@@ -34,7 +34,7 @@ class AppUpgrade {
   }
 
   get downloadDestPath() {
-    return this.options.downloadDestPath;
+    return this.options.downloadDestDirectory + this.options.downloadApkName;
   }
 
   get downloadDestDirectory() {
@@ -76,7 +76,7 @@ class AppUpgrade {
     const downloadConf = {
       downloadTitle: this.options.downloadTitle,
       downloadDescription: this.options.downloadDescription,
-      saveAsName: DEFAULT_DOWNLOAD_APK_NAME,
+      saveAsName: this.options.downloadApkName,
       allowedInRoaming: true,
       allowedInMetered: true,
       showInDownloads: true,
