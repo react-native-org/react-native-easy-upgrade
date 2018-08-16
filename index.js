@@ -34,7 +34,7 @@ class AppUpgrade {
   }
 
   get downloadDestPath() {
-    return this.options.downloadDestDirectory + this.options.downloadApkName;
+    return this.options.downloadDestDirectory +  '/' + this.options.downloadApkName;
   }
 
   get downloadDestDirectory() {
