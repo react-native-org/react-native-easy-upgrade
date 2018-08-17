@@ -16,9 +16,9 @@ import android.support.v4.content.FileProvider;
 import android.support.v4.util.LongSparseArray;
 import android.util.Log;
 import com.facebook.react.bridge.*;
+import org.hstar.reactnative.esayupgrade.IORejectionException;
 
-import java.io.File;
-import java.io.FileNotFoundException;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -63,7 +63,6 @@ public class RNEasyUpgradeModule extends ReactContextBaseJavaModule {
         return "RNEasyUpgrade";
     }
 
-
     BroadcastReceiver downloadReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -86,6 +85,19 @@ public class RNEasyUpgradeModule extends ReactContextBaseJavaModule {
             }
         }
     };
+
+    private Uri getFileUri(String filepath) throws IORejectionException {
+        Uri uri = Uri.parse(filepath);
+        if (uri.getScheme() == null) {
+            // No prefix, assuming that provided path is absolute path to file
+            File file = new File(filepath);
+            if (file.isDirectory()) {
+                throw new IORejectionException("EISDIR", "EISDIR: illegal operation on a directory, read '" + filepath + "'");
+            }
+            uri = Uri.parse("file://" + filepath);
+        }
+        return uri;
+    }
 
 
     @ReactMethod
@@ -161,6 +173,108 @@ public class RNEasyUpgradeModule extends ReactContextBaseJavaModule {
             ex.printStackTrace();
             reject(promise, filepath, ex);
         }
+    }
+
+    @ReactMethod
+    public void moveFile(String filepath, String destPath, Promise promise) {
+        try {
+            File externalStorageDirectory = Environment.getExternalStorageDirectory();
+            if (externalStorageDirectory != null && !filepath.contains(externalStorageDirectory.getAbsolutePath())) {
+                filepath = externalStorageDirectory.getAbsolutePath() + filepath;
+                destPath = externalStorageDirectory.getAbsolutePath() + destPath;
+            }
+
+            File inFile = new File(filepath);
+
+            if (!inFile.renameTo(new File(destPath))) {
+                copyFile(filepath, destPath);
+                inFile.delete();
+            }
+
+            promise.resolve(true);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            reject(promise, filepath, ex);
+        }
+    }
+
+    @ReactMethod
+    public void copyFile(String filepath, String destPath, Promise promise) {
+        try {
+            copyFile(filepath, destPath);
+
+            promise.resolve(null);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            reject(promise, filepath, ex);
+        }
+    }
+
+    @ReactMethod
+    public void unlink(String filepath, Promise promise) {
+        try {
+            File file = new File(filepath);
+
+            if (!file.exists()) throw new Exception("File does not exist");
+
+            DeleteRecursive(file);
+
+            promise.resolve(null);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            reject(promise, filepath, ex);
+        }
+    }
+
+    private void DeleteRecursive(File fileOrDirectory) {
+        if (fileOrDirectory.isDirectory()) {
+            for (File child : fileOrDirectory.listFiles()) {
+                DeleteRecursive(child);
+            }
+        }
+
+        fileOrDirectory.delete();
+    }
+
+    private void copyFile(String filepath, String destPath) throws IOException, IORejectionException {
+        InputStream in = getInputStream(filepath);
+        OutputStream out = getOutputStream(destPath, false);
+
+        byte[] buffer = new byte[1024];
+        int length;
+        while ((length = in.read(buffer)) > 0) {
+            out.write(buffer, 0, length);
+        }
+        in.close();
+        out.close();
+    }
+
+    private InputStream getInputStream(String filepath) throws IORejectionException {
+        Uri uri = getFileUri(filepath);
+        InputStream stream;
+        try {
+            stream = reactContext.getContentResolver().openInputStream(uri);
+        } catch (FileNotFoundException ex) {
+            throw new IORejectionException("ENOENT", "ENOENT: no such file or directory, open '" + filepath + "'");
+        }
+        if (stream == null) {
+            throw new IORejectionException("ENOENT", "ENOENT: could not open an input stream for '" + filepath + "'");
+        }
+        return stream;
+    }
+
+    private OutputStream getOutputStream(String filepath, boolean append) throws IORejectionException {
+        Uri uri = getFileUri(filepath);
+        OutputStream stream;
+        try {
+            stream = reactContext.getContentResolver().openOutputStream(uri, append ? "wa" : "w");
+        } catch (FileNotFoundException ex) {
+            throw new IORejectionException("ENOENT", "ENOENT: no such file or directory, open '" + filepath + "'");
+        }
+        if (stream == null) {
+            throw new IORejectionException("ENOENT", "ENOENT: could not open an output stream for '" + filepath + "'");
+        }
+        return stream;
     }
 
     private void rejectFileNotFound(Promise promise, String filepath) {

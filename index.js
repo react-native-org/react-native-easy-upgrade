@@ -19,6 +19,7 @@ const defaults = {
   downloadDestDirectory: DocumentDirectoryPath,
   downloadApkName: DEFAULT_DOWNLOAD_APK_NAME,
   downloadApkEnd: path => RNEasyUpgrade.installApk(path),
+  shouldCheckApkHasDownloaded: true,
   onError: () => {}
 };
 
@@ -73,10 +74,13 @@ class AppUpgrade {
       return;
     }
 
+    const tempDownloadApkName = 'temp_download.apk';
+    const tempDownloadPath = this.downloadDestDirectory + '/' + tempDownloadApkName;
+
     const downloadConf = {
       downloadTitle: this.options.downloadTitle,
       downloadDescription: this.options.downloadDescription,
-      saveAsName: this.options.downloadApkName,
+      saveAsName: this.options.shouldCheckApkHasDownloaded ? tempDownloadApkName : this.options.downloadApkName,
       allowedInRoaming: true,
       allowedInMetered: true,
       showInDownloads: true,
@@ -85,8 +89,11 @@ class AppUpgrade {
     };
     jobId = 1;
     download(apkUrl, downloadConf)
-      .then(res => {
+      .then(async res => {
         jobId = -1;
+        if (this.options.shouldCheckApkHasDownloaded) {
+          await RNEasyUpgrade.moveFile(tempDownloadPath, this.downloadDestPath);
+        }
         this.options.downloadApkEnd(this.downloadDestPath);
       })
       .catch(err => {
@@ -132,9 +139,9 @@ class AppUpgrade {
     RNEasyUpgrade.openURL(trackViewUrl || this.trackViewUrl);
   }
 
-  startAppUpdate(apkUrl, appStoreUrl = this.trackViewUrl, options = { checkApkHasDownloaded: true }) {
+  startAppUpdate(apkUrl, appStoreUrl = this.trackViewUrl) {
     if (isAndroid) {
-      if (options.checkApkHasDownloaded) {
+      if (this.options.shouldCheckApkHasDownloaded) {
         this.checkApkHasDownloaded().then(async hasDownloaded => {
           if (hasDownloaded) {
             this.options.downloadApkEnd(this.downloadDestPath);
