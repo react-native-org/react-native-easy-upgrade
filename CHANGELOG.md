@@ -1,3 +1,7 @@
+## 0.0.5 (2018-08-17)
+
+* Add download temp cache check
+
 ## 0.0.4 (2018-08-16)
 
 * Fix download apk path joint error
