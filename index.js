@@ -1,5 +1,5 @@
 import { NativeModules, NetInfo, Platform } from 'react-native';
-import { download, isFileExists } from './lib/downloadHelper';
+import { deleteFile, download, isFileExists } from './lib/downloadHelper';
 
 const { RNEasyUpgrade } = NativeModules;
 
@@ -35,7 +35,7 @@ class AppUpgrade {
   }
 
   get downloadDestPath() {
-    return this.options.downloadDestDirectory +  '/' + this.options.downloadApkName;
+    return this.options.downloadDestDirectory + '/' + this.options.downloadApkName;
   }
 
   get downloadDestDirectory() {
@@ -47,7 +47,7 @@ class AppUpgrade {
   }
 
   _handleError(err) {
-    console.log('downloadApkError', err);
+    console.log('EasyUpgradeError', err);
     this.options.onError(err);
   }
 
@@ -63,20 +63,39 @@ class AppUpgrade {
 
   checkApkHasDownloaded = async (path = this.downloadDestPath) => {
     return await isFileExists(path);
-  };
+  }
+  /**
+   * download file
+   * @param fileUrl
+   * @param downloadConf
+   */
+  downloadFile(fileUrl, downloadConf = {}) {
+    jobId = 1;
+    download(fileUrl, downloadConf)
+      .then(async res => {
+        jobId = -1;
+        if (this.options.shouldCheckApkHasDownloaded) {
+          await RNEasyUpgrade.moveFile(downloadConf.tempDownloadPath, this.downloadDestPath);
+        }
+        this.options.downloadApkEnd(this.downloadDestPath);
+      })
+      .catch(err => {
+        jobId = -1;
+        this._handleError(err);
+      });
+  }
 
   /**
    * update app and install
    * @param apkUrl
    */
-  updateAndroidApp(apkUrl) {
+  async updateAndroidApp(apkUrl) {
     if (this.downloading) {
       return;
     }
 
     const tempDownloadApkName = 'temp_download.apk';
     const tempDownloadPath = this.downloadDestDirectory + '/' + tempDownloadApkName;
-
     const downloadConf = {
       downloadTitle: this.options.downloadTitle,
       downloadDescription: this.options.downloadDescription,
@@ -85,26 +104,23 @@ class AppUpgrade {
       allowedInMetered: true,
       showInDownloads: true,
       external: true, //when false basically means use the default Download path
-      path: this.downloadDestDirectory //if "external" is true then use this path
+      path: this.downloadDestDirectory, //if "external" is true then use this path
+      tempDownloadPath: tempDownloadPath
     };
-    jobId = 1;
-    download(apkUrl, downloadConf)
-      .then(async res => {
-        jobId = -1;
-        if (this.options.shouldCheckApkHasDownloaded) {
-          await RNEasyUpgrade.moveFile(tempDownloadPath, this.downloadDestPath);
+    if (this.options.shouldCheckApkHasDownloaded) {
+      try {
+        const isTempFileExisted = await isFileExists(tempDownloadPath);
+        if (isTempFileExisted) {
+          await deleteFile(tempDownloadPath);
         }
-        this.options.downloadApkEnd(this.downloadDestPath);
-      })
-      .catch(err => {
-        console.log(err);
-        jobId = -1;
+      } catch (err) {
         this._handleError(err);
-      });
+      }
+    }
+    this.downloadFile(apkUrl, downloadConf);
   }
 
   installApk(apkPath = this.downloadDestPath) {
-    console.log(apkPath);
     RNEasyUpgrade.installApk(apkPath);
   }
 

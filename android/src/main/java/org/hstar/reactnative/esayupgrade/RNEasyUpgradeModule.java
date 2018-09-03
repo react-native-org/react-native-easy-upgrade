@@ -99,6 +99,14 @@ public class RNEasyUpgradeModule extends ReactContextBaseJavaModule {
         return uri;
     }
 
+    private String getRealPath(String filePath) {
+        File externalStorageDirectory = Environment.getExternalStorageDirectory();
+        if (externalStorageDirectory != null && !filePath.contains(externalStorageDirectory.getAbsolutePath())) {
+            filePath = externalStorageDirectory.getAbsolutePath() + filePath;
+        }
+
+        return filePath;
+    }
 
     @ReactMethod
     public void download(String url, ReadableMap headers, ReadableMap config, Callback onDone) {
@@ -213,6 +221,7 @@ public class RNEasyUpgradeModule extends ReactContextBaseJavaModule {
     @ReactMethod
     public void unlink(String filepath, Promise promise) {
         try {
+            filepath = getRealPath(filepath);
             File file = new File(filepath);
 
             if (!file.exists()) throw new Exception("File does not exist");
