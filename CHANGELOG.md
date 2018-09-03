@@ -1,3 +1,7 @@
+## 0.0.6 (2018-09-03)
+
+* Fix when tempFile download failed cannot install new apk bug
+
 ## 0.0.5 (2018-08-17)
 
 * Add download temp cache check
