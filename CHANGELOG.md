@@ -1,3 +1,7 @@
+## 0.0.7 (2018-09-04)
+
+* Fix RN 0.50+ android build failed bug and add docs&examples
+
 ## 0.0.6 (2018-09-03)
 
 * Fix when tempFile download failed cannot install new apk bug
