@@ -107,17 +107,45 @@ onError | - | OK | NO | - | 下载出错回调
 
 ### Other Util
 
-#### 1.getNetworkStatus
-`WIFI 4G or another`
-#### 2.getLocalVersionInfo
-```javascript
+### 1.getNetworkStatus()
+
+Gets the Network status.
+
+**Examples**
+
+```js
+const networkStatus = appUpgrade.getNetworkStatus();
+
+```
+**Notes**
+
+- none - 设备处于离线状态
+
+- wifi - 设备通过wifi联网，或者设备是iOS模拟器
+- cellular - 设备通过蜂窝数据流量联网
+- unknown - 联网状态异常
+
+---
+### 2.getLocalVersionInfo()
+
+Gets the localVersion info.
+
+**Examples**
+```js
+const localVersionInfo = appUpgrade.getLocalVersionInfo();
+
+```
+**Notes**
+```js
 localVersionInfo {
   versionName: '',
   versionCode: ''
 }
 ```
-#### 3.installApk
-#### 4.navigateToAppStore
+### 3.installApk()
+Install apk.
 
+### 4.navigateToAppStore
+Navigates to iOS AppStore
 
 
