@@ -1,0 +1,5 @@
+rootProject.name = 'EasyUpgradeExample'
+include ':react-native-easy-upgrade'
+project(':react-native-easy-upgrade').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-easy-upgrade/android')
+
+include ':app'

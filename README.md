@@ -38,31 +38,45 @@ project(':react-native-easy-upgrade').projectDir = new File(rootProject.projectD
 ```javascript
 import RNEasyUpgrade from 'react-native-easy-upgrade';
 
-const appUpdate = new RNEasyUpgrade({
+this.easyUpgrade = new RNEasyUpgrade({
   iOSAppId: '12345678',
   downloadTitle: 'Download package',
   downloadDescription: 'Packing downloading...',
   downloadApkEnd: () => {
    //eg: install apk
-   showSomething()
+    this.easyUpgrade.installApk();
   },
   onError: () => {
     console.log('downloadApkError');
   }
 });
 
-// For Android
-if (Platform.os === 'android') {
-  Toast("New version an available! Downloading...");
-  checkUpdateInfo();
-  appUpdate.downloadApk(apkFilePath);
-} else if (Platform.OS === 'ios'){
-  appUpdate.checkAppVersionIOS()
-  .then(versionInfo => {
-    if(versionInfo.hasNewVersion){
-      // Navigate to AppStore
-      appUpdate.navigateToAppStore();
-    }
-  });
+async getUpdateInfo() {
+  let updateInfo = {
+    latestVersion: '3.0.0',
+    hasNewVersion: true,
+    apkUrl: 'http://{remoteApkDownloadUrl}'
+  };
+  if (isAndroid) {
+    updateInfo = await fetch('http://{remoteUrl}/updateInfo.json')
+  } else {
+    updateInfo = await this.easyUpgrade.checkAppVersionIOS()
+  }
+  return updateInfo;
 }
+
+ async startUpgrade() {
+    const updateInfo = await this.getUpdateInfo();
+    if (updateInfo.hasNewVersion) {
+      Alert.alert(
+        'Find a new version: ' + updateInfo.latestVersion,
+        'Whether to upgrade app?',
+        [
+          {text: 'Ask me later', onPress: () => console.log('Ask me later pressed')},
+          {text: 'Upgrade', onPress: () => this.easyUpgrade.startAppUpdate(updateInfo.apkUrl)},
+        ],
+      )
+    }
+  }
+
 ```
