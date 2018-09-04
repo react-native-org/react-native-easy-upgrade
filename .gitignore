@@ -1,8 +1,8 @@
 *.pbxproj -text
 android/build/
 .idea
-*.iml
-xcuserdata/
+android/*.iml
+ios/*/xcuserdata/
 
 # Logs
 logs
