@@ -61,9 +61,9 @@ this.easyUpgrade = new RNEasyUpgrade({
 配置 | iOS  | Android | isRequired | default | 详情
 ------ | ---- | ------- | --- | --- |----
 iOSAppLookupUrl | OK | - | NO| AppStore Url| iOSAppLookupUrl
-iOSAppId | OK | - | YES | - |iOSAppId
-shouldCheckApkHasDownloaded | - | OK | NO | true |下载之前是否进行check，防止重复下载
-downloadTitle | - | OK | NO | 下载更新包 |任务栏下载标题
+iOSAppId | OK | - | YES | - | iOSAppId
+shouldCheckApkHasDownloaded | - | OK | NO | true | 下载之前是否进行check，防止重复下载
+downloadTitle | - | OK | NO | 下载更新包 | 任务栏下载标题
 downloadDescription | - | OK | NO | 新版本更新包下载中 | 任务栏下载描述
 downloadDestDirectory | - | OK | NO | DocumentDirectoryPath| 下载Apk文件目录
 downloadApkName | - | OK | NO | newVersion.apk | 下载Apk文件名称
@@ -105,7 +105,7 @@ onError | - | OK | NO | - | 下载出错回调
   }
 ```
 
-### Other Util
+### Other Utils
 
 ### 1.getNetworkStatus()
 
