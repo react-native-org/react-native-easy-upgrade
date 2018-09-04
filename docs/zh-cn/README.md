@@ -104,6 +104,8 @@ onError | - | OK | NO | - | 下载出错回调
     }
   }
 ```
+### More Details Please watch this example:
+[example](https://github.com/react-native-org/react-native-easy-upgrade/tree/master/examples)
 
 ### Other Utils
 
