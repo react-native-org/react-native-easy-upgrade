@@ -1,3 +1,7 @@
+## 0.0.8 (2018-12-27)
+
+* npm publish the new package
+
 ## 0.0.7 (2018-09-04)
 
 * Fix RN 0.50+ android build failed bug and add docs&examples
