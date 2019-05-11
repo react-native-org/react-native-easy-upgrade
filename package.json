@@ -1,6 +1,6 @@
 {
   "name": "react-native-easy-upgrade",
-  "version": "0.0.8",
+  "version": "0.0.9",
   "description": "Easy to upgrade your react-native app",
   "main": "index.js",
   "directories": {

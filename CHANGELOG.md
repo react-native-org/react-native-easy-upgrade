@@ -1,3 +1,7 @@
+## 0.0.9 (2019-05-11)
+
+* add fileProvider sample in demo and fix bug
+
 ## 0.0.8 (2018-12-27)
 
 * npm publish the new package
