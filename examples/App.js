@@ -44,10 +44,10 @@ export default class App extends Component {
     let updateInfo = {
       latestVersion: '3.0.0',
       hasNewVersion: true,
-      apkUrl: 'http://{remoteApkDownloadUrl}'
+      apkUrl: 'http://192.168.4.234:8000/Exponent-2.2.0.apk'
     };
     if (isAndroid) {
-      updateInfo = await fetch('http://{remoteUrl}/updateInfo.json')
+      // updateInfo = await fetch('http://{remoteUrl}/updateInfo.json')
     } else {
       updateInfo = await this.easyUpgrade.checkAppVersionIOS()
     }

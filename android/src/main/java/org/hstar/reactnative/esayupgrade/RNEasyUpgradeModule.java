@@ -303,14 +303,15 @@ public class RNEasyUpgradeModule extends ReactContextBaseJavaModule {
     @Override
     public Map<String, Object> getConstants() {
         final Map<String, Object> constants = new HashMap<>();
+        ReactApplicationContext reactApplicationContext = this.getReactApplicationContext();
 
         constants.put("versionName", versionName);
         constants.put("versionCode", versionCode);
 
-        constants.put(RNDocumentDirectoryPath, this.getReactApplicationContext().getFilesDir().getAbsolutePath());
-        constants.put(RNTemporaryDirectoryPath, this.getReactApplicationContext().getCacheDir().getAbsolutePath());
+        constants.put(RNDocumentDirectoryPath, reactApplicationContext.getFilesDir().getAbsolutePath());
+        constants.put(RNTemporaryDirectoryPath, reactApplicationContext.getCacheDir().getAbsolutePath());
         constants.put(RNPicturesDirectoryPath, Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath());
-        constants.put(RNCachesDirectoryPath, this.getReactApplicationContext().getCacheDir().getAbsolutePath());
+        constants.put(RNCachesDirectoryPath, reactApplicationContext.getCacheDir().getAbsolutePath());
 
         File externalStorageDirectory = Environment.getExternalStorageDirectory();
         if (externalStorageDirectory != null) {
@@ -320,7 +321,7 @@ public class RNEasyUpgradeModule extends ReactContextBaseJavaModule {
         }
 
 
-        File externalCachesDirectory = this.getReactApplicationContext().getExternalCacheDir();
+        File externalCachesDirectory = reactApplicationContext.getExternalCacheDir();
         if (externalCachesDirectory != null) {
             constants.put(RNExternalCachesDirectoryPath, externalCachesDirectory.getAbsolutePath());
         } else {
@@ -349,7 +350,8 @@ public class RNEasyUpgradeModule extends ReactContextBaseJavaModule {
             apkPath = externalStorageDirectory.getAbsolutePath() + apkPath;
         }
         File apkFile = new File(apkPath);
-        if (Build.VERSION.SDK_INT >= 23) {
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             Uri contentUri = FileProvider.getUriForFile(reactContext, reactContext.getPackageName() + ".provider", apkFile);
             //添加这一句表示对目标应用临时授权该Uri所代表的文件
             intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
@@ -357,7 +359,6 @@ public class RNEasyUpgradeModule extends ReactContextBaseJavaModule {
         } else {
             intent.setDataAndType(Uri.fromFile(apkFile), "application/vnd.android.package-archive");
         }
-
         this.getCurrentActivity().startActivity(intent);
     }
 }
