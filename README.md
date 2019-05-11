@@ -33,6 +33,11 @@ project(':react-native-easy-upgrade').projectDir = new File(rootProject.projectD
 ```
   compile project(':react-native-easy-upgrade')
 ```
+
+#### 2019-5-11 Note:
+
+由于android7.0+提供了file provider权限控制，如果android7.0+机型需在主项目中使用file provider，否则将没有权限访问文件！详见demo AndroidManifest.xml及res/xml/provider_paths.xml.
+
 ## Usage
 
 ```javascript
@@ -80,3 +85,5 @@ async getUpdateInfo() {
   }
 
 ```
+
+
