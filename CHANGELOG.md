@@ -1,3 +1,7 @@
+## 0.1.0 (2018-08-23)
+
+* add fileProvider in the project
+
 ## 0.0.9 (2019-05-11)
 
 * add fileProvider sample in demo and fix bug
