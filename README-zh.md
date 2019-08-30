@@ -32,7 +32,7 @@ project(':react-native-easy-upgrade').projectDir = new File(rootProject.projectD
 
 3. Insert the following lines inside the dependencies block in `android/app/build.gradle`:
 ```
-  compile project(':react-native-easy-upgrade')
+  implementation project(':react-native-easy-upgrade')
 ```
 ## Usage
 
