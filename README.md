@@ -36,7 +36,7 @@ project(':react-native-easy-upgrade').projectDir = new File(rootProject.projectD
 
 #### 2019-8-30 Note:
 
-This project has been added to the android file provider, if the main project or other plug-in provider conflicts, please keep it consistent.
+This project has been added to the `android file provider`, if the main project or other plug-in `provider` conflicts, please keep it consistent.
 
 ## Usage
 
