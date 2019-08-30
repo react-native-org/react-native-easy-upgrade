@@ -31,12 +31,12 @@ project(':react-native-easy-upgrade').projectDir = new File(rootProject.projectD
 
 3. Insert the following lines inside the dependencies block in `android/app/build.gradle`:
 ```
-  compile project(':react-native-easy-upgrade')
+  implementation project(':react-native-easy-upgrade')
 ```
 
-#### 2019-5-11 Note:
+#### 2019-8-30 Note:
 
-由于android7.0+提供了file provider权限控制，如果android7.0+机型需在主项目中使用file provider，否则将没有权限访问文件！详见demo AndroidManifest.xml及res/xml/provider_paths.xml.
+This project has been added to the android file provider, if the main project or other plug-in provider conflicts, please keep it consistent.
 
 ## Usage
 
