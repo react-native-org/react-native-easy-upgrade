@@ -21,7 +21,7 @@
   },
   "homepage": "https://github.com/react-native-org/react-native-easy-upgrade#readme",
   "devDependencies": {
-    "react-native": "^0.44.3"
+    "react-native": "^0.70.6"
   },
   "importSort": {
     ".js, .jsx, .es6, .es,": {
